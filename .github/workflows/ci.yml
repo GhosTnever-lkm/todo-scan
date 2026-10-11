@@ -27,4 +27,4 @@ jobs:
           python -m pip install --quiet build
           python -m build --outdir dist
       - name: Scan the bundled example
-        run: python -m todo_scan examples --block FIXME
+        run: python -m todo_scan examples --block XXX
