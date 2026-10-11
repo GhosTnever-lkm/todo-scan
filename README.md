@@ -9,6 +9,7 @@ python -m todo_scan                          # отчёт по текущей п
 python -m todo_scan . --block FIXME          # FIXME валит запуск (код 1)
 python -m todo_scan . --require-owner        # каждый маркер нужен с владельцем: TODO(alice)
 python -m todo_scan . --json
+python -m todo_scan . --exclude "docs/generated/*"   # пропустить сгенерированные файлы
 ```
 
 Пример вывода для [examples](examples):

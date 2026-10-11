@@ -1,4 +1,4 @@
-"""todo-scan [PATH] [--block TAG ...] [--require-owner] [--json]"""
+"""todo-scan [PATH] [--block TAG ...] [--require-owner] [--exclude GLOB] [--json]"""
 
 from __future__ import annotations
 
@@ -18,13 +18,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("path", nargs="?", default=".")
     p.add_argument("--block", action="append", default=[], metavar="TAG", help="tag that fails the run, e.g. FIXME (repeatable)")
     p.add_argument("--require-owner", action="store_true", help="every marker needs an owner, e.g. TODO(alice)")
+    p.add_argument("--exclude", action="append", default=[], metavar="GLOB", help="skip paths matching this glob, e.g. 'docs/*' (repeatable)")
     p.add_argument("--json", action="store_true")
     p.add_argument("--version", action="version", version=__version__)
     args = p.parse_args(argv)
     if not Path(args.path).is_dir():
         print(f"todo-scan: not a directory: {args.path}", file=sys.stderr)
         return 2
-    markers = scan_repo(args.path)
+    markers = scan_repo(args.path, exclude=tuple(args.exclude))
     bad = violations(markers, set(args.block), args.require_owner)
     if args.json:
         print(json.dumps({"markers": [asdict(m) for m in markers], "violations": len(bad)}, indent=2, ensure_ascii=False))

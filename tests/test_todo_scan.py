@@ -46,6 +46,15 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn("markers: 0", out)
 
+    def test_exclude_glob_skips_paths(self):
+        root = Path(tempfile.mkdtemp())
+        (root / "docs").mkdir()
+        (root / "docs" / "guide.md").write_text("TODO: docs\n", encoding="utf-8")
+        (root / "app.py").write_text("# TODO(bob): code\n", encoding="utf-8")
+        self.assertEqual([m.file for m in scan_repo(root, exclude=("docs/*",))], ["app.py"])
+        code, out = self.run_cli(["--exclude", "docs/*", str(root)])
+        self.assertIn("markers: 1", out)
+
     def test_block_tag_fails(self):
         root = Path(tempfile.mkdtemp())
         (root / "a.py").write_text("# FIXME: boom\n", encoding="utf-8")

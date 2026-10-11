@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -39,15 +40,23 @@ def iter_files(root: Path):
             yield path
 
 
-def scan_repo(root: str | Path) -> list[Marker]:
+def _excluded(rel: str, patterns: tuple[str, ...]) -> bool:
+    return any(fnmatch.fnmatch(rel, pat) or fnmatch.fnmatch(rel.rsplit("/", 1)[-1], pat) for pat in patterns)
+
+
+def scan_repo(root: str | Path, exclude: tuple[str, ...] = ()) -> list[Marker]:
+    """Scan text files under root; `exclude` globs skip paths (matched on full path or basename)."""
     base = Path(root).resolve()
     markers: list[Marker] = []
     for path in sorted(iter_files(base)):
+        rel = path.relative_to(base).as_posix()
+        if _excluded(rel, exclude):
+            continue
         try:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        markers.extend(scan_text(text, path.relative_to(base).as_posix()))
+        markers.extend(scan_text(text, rel))
     return markers
 
 

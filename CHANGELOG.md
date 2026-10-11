@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `--exclude GLOB` (repeatable) to skip paths such as generated docs.
+
 ## [0.1.0] - 2026-10-11
 
 ### Added
