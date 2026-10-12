@@ -1,11 +1,20 @@
 # todo-scan
 
+[![CI](https://github.com/GhosTnever-lkm/todo-scan/actions/workflows/ci.yml/badge.svg)](https://github.com/GhosTnever-lkm/todo-scan/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/GhosTnever-lkm/todo-scan)](https://github.com/GhosTnever-lkm/todo-scan/releases/latest)
+
 Находит маркеры `TODO`, `FIXME`, `XXX` и `HACK` в репозитории и может провалить CI, если найден блокирующий маркер или маркер без владельца. Работает офлайн, только читает файлы, без зависимостей, Python 3.10+.
 
 ## Быстрый старт
 
+Скачайте wheel из [последнего релиза](https://github.com/GhosTnever-lkm/todo-scan/releases/latest) и установите:
+
 ```bash
-python -m todo_scan                          # отчёт по текущей папке
+python -m pip install todo_scan-0.1.2-py3-none-any.whl
+```
+
+```bash
+todo-scan .                                  # отчёт по текущей папке
 python -m todo_scan . --block FIXME          # FIXME валит запуск (код 1)
 python -m todo_scan . --require-owner        # каждый маркер нужен с владельцем: TODO(alice)
 python -m todo_scan . --json
@@ -26,6 +35,7 @@ markers: 3 (FIXME=1, HACK=1, TODO=1); violations: 0
 - Все текстовые файлы в папке, кроме `.git`, `node_modules`, `.venv`, `venv`, `__pycache__`, `dist`, `build`.
 - Бинарные файлы (изображения, архивы, шрифты) и файлы больше 1 МБ пропускаются.
 - Маркер ищется по целому слову: `TODOS` и `mytodo` не считаются.
+- Несколько маркеров в одной строке выводятся отдельными находками.
 
 ## Коды возврата
 
@@ -52,6 +62,10 @@ markers: 3 (FIXME=1, HACK=1, TODO=1); violations: 0
 ```bash
 python -m unittest discover -s tests -t .
 ```
+
+## Поддержка и Pro-версия
+
+Базовая версия остаётся бесплатной; отдельный Pro-выпуск пока не опубликован. Нужна интеграция с вашим CI или специальные правила проверки? [Опишите сценарий в запросе](https://github.com/GhosTnever-lkm/todo-scan/issues/new).
 
 ## Лицензия
 

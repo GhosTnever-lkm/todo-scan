@@ -7,7 +7,11 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-MARKER_RE = re.compile(r"\b(?P<tag>TODO|FIXME|XXX|HACK)\b(?:\((?P<owner>[^)]*)\))?[:\s]?(?P<text>.*)")
+MARKER_RE = re.compile(
+    r"\b(?P<tag>TODO|FIXME|XXX|HACK)\b"
+    r"(?:\((?P<owner>[^)]*)\))?[:\s]?"
+    r"(?P<text>.*?)(?=\b(?:TODO|FIXME|XXX|HACK)\b|$)"
+)
 SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", "dist", "build"}
 BINARY_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".zip", ".gz", ".ico", ".woff", ".woff2", ".ttf"}
 MAX_BYTES = 1024 * 1024
@@ -25,8 +29,7 @@ class Marker:
 def scan_text(text: str, file: str = "<text>") -> list[Marker]:
     markers: list[Marker] = []
     for number, line in enumerate(text.splitlines(), start=1):
-        match = MARKER_RE.search(line)
-        if match:
+        for match in MARKER_RE.finditer(line):
             markers.append(Marker(file, number, match.group("tag"), match.group("owner"), match.group("text").strip()))
     return markers
 

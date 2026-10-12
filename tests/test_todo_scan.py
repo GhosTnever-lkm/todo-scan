@@ -17,6 +17,13 @@ class ScanTests(unittest.TestCase):
     def test_word_boundary_ignores_substrings(self):
         self.assertEqual(scan_text("TODOS are not markers\nmytodo here\n"), [])
 
+    def test_finds_multiple_markers_on_one_line(self):
+        found = scan_text("# TODO(alice): first; FIXME: second\n")
+        self.assertEqual(
+            [(m.tag, m.owner, m.text) for m in found],
+            [("TODO", "alice", "first;"), ("FIXME", None, "second")],
+        )
+
     def test_violations(self):
         found = scan_text("TODO(a): x\nFIXME: y\nHACK: z\n")
         self.assertEqual({m.tag for m in violations(found, {"FIXME"}, False)}, {"FIXME"})
@@ -71,6 +78,15 @@ class CliTests(unittest.TestCase):
     def test_bad_path(self):
         with contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(self.run_cli(["/no/such"])[0], 2)
+
+    def test_version_matches_package_metadata(self):
+        from todo_scan import __version__
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit) as raised:
+            main(["--version"])
+        self.assertEqual(raised.exception.code, 0)
+        self.assertEqual(buf.getvalue().strip(), __version__)
 
 
 if __name__ == "__main__":
