@@ -29,6 +29,11 @@ class ScanTests(unittest.TestCase):
         self.assertEqual({m.tag for m in violations(found, {"FIXME"}, False)}, {"FIXME"})
         self.assertEqual(len(violations(found, set(), True)), 2)
 
+    def test_whitespace_only_owner_is_missing(self):
+        found = scan_text("# TODO(   ): task without an owner\n")
+        self.assertIsNone(found[0].owner)
+        self.assertEqual(violations(found, set(), True), found)
+
     def test_repo_scan_skips_vendor_and_binary(self):
         root = Path(tempfile.mkdtemp())
         (root / "node_modules").mkdir()

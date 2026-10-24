@@ -10,7 +10,7 @@
 Скачайте wheel из [последнего релиза](https://github.com/GhosTnever-lkm/todo-scan/releases/latest) и установите:
 
 ```bash
-python -m pip install todo_scan-0.1.2-py3-none-any.whl
+python -m pip install todo_scan-0.1.3-py3-none-any.whl
 ```
 
 ```bash
