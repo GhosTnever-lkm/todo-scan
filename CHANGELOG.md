@@ -5,6 +5,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-25
+
+### Fixed
+
+- Treat a whitespace-only marker owner as missing so `--require-owner` fails correctly.
+
 ## [0.1.2] - 2026-10-13
 
 ### Added
@@ -33,7 +39,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `--block TAG` fails the run for chosen tags; `--require-owner` requires `TODO(name)` style owners.
 - `--json` output and a summary line per run.
 
-[Unreleased]: https://github.com/GhosTnever-lkm/todo-scan/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/GhosTnever-lkm/todo-scan/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/GhosTnever-lkm/todo-scan/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/GhosTnever-lkm/todo-scan/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/GhosTnever-lkm/todo-scan/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/GhosTnever-lkm/todo-scan/releases/tag/v0.1.0

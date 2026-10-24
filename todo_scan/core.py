@@ -30,7 +30,10 @@ def scan_text(text: str, file: str = "<text>") -> list[Marker]:
     markers: list[Marker] = []
     for number, line in enumerate(text.splitlines(), start=1):
         for match in MARKER_RE.finditer(line):
-            markers.append(Marker(file, number, match.group("tag"), match.group("owner"), match.group("text").strip()))
+            owner = match.group("owner")
+            if owner is not None:
+                owner = owner.strip() or None
+            markers.append(Marker(file, number, match.group("tag"), owner, match.group("text").strip()))
     return markers
 
 
